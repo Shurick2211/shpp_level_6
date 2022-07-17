@@ -13,8 +13,12 @@ public class HistogramEqualizationLogic {
      * @return A histogram of those luminances.
      */
     public static int[] histogramFor(int[][] luminances) {
-        /* TODO: Implement this method! */
-        return null;
+        int[] hist = new int[256];
+        for(int x = 0; x < luminances.length; x++) {
+            for (int y = 0; y < luminances[x].length; y++)
+               hist[luminances[x][y]]++;
+        }
+        return hist;
     }
 
     /**
@@ -28,8 +32,11 @@ public class HistogramEqualizationLogic {
      * @return The cumulative frequency array.
      */
     public static int[] cumulativeSumFor(int[] histogram) {
-		/* TODO: Implement this method! */
-        return null;
+        int[] cumHist = new int[histogram.length];
+        for (int i = 0; i < cumHist.length; i++)
+            if (i == 0) cumHist[i] = histogram[i];
+                else cumHist[i] = cumHist[i-1] + histogram[i];
+        return cumHist;
     }
 
     /**
@@ -39,8 +46,7 @@ public class HistogramEqualizationLogic {
      * @return The total number of pixels in that image.
      */
     public static int totalPixelsIn(int[][] luminances) {
-		/* TODO: Implement this method! */
-        return 0;
+        return luminances.length * luminances[0].length;
     }
 
     /**
@@ -54,7 +60,15 @@ public class HistogramEqualizationLogic {
      * @return The luminances of the image formed by applying histogram equalization.
      */
     public static int[][] equalize(int[][] luminances) {
-		/* TODO: Implement this method! */
-        return null;
+        int[][] result = new int[luminances.length][luminances[0].length];
+        int[] cumulativeSumFor = cumulativeSumFor(histogramFor(luminances));
+        int totalPixels = totalPixelsIn(luminances);
+        for(int x = 0; x < luminances.length; x++) {
+            for (int y = 0; y < luminances[x].length; y++)
+                result[x][y] =  MAX_LUMINANCE
+                    * cumulativeSumFor[luminances[x][y]]
+            / totalPixels;
+        }
+        return result;
     }
 }
