@@ -29,9 +29,11 @@ public class ToneMatrixLogic {
      */
     private static void normalization(double[] input) {
         double min = Arrays.stream(input).min().getAsDouble();
-        if (min == 0.0) min = 1.0;
+        double max = Arrays.stream(input).max().getAsDouble();
+        double maxDiv = -min > max ? min : max;
+        if (maxDiv == 0.0) maxDiv = 1.0;
         for (int i = 0; i < input.length; i++) {
-            input[i] = input[i] / min;
+            input[i] = input[i] / maxDiv;
             if (input[i] < -1.0) input[i] = -1.0;
             if (input[i] > 1.0) input[i] = 1.0;
         }
